@@ -48,7 +48,7 @@ function save($filename, $content)
 }
 
 function nama()
-    {
+{
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "http://ninjaname.horseridersupply.com/indonesian_name.php");
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -59,64 +59,53 @@ function nama()
 
     preg_match_all('~(&bull; (.*?)<br/>&bull; )~', $ex, $name);
     return $name[2][mt_rand(0, 14) ];
-    }
+}
 
 function register($no)
-    {
+{
     $nama = nama();
     $email = str_replace(" ", "", $nama) . mt_rand(100, 999);
     $data = '{"email":"'.$email.'@gmail.com","name":"'.$nama.'","phone":"+'.$no.'","signed_up_country":"ID"}';
     $register = request("/v5/customers", "", $data);
-    if ($register['success'] == 1)
-        {
+    if ($register['success']){
         return $register['data']['otp_token'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($register));
+    }else{
+        save("error_log.txt", json_encode($register));
         return false;
-        }
     }
+}
 
-    function login($no)
-    {
-
+function login($no)
+{
     $data = '{"phone":"+'.$no.'"}';
     $register = request("/v4/customers/login_with_phone", "", $data);
    
-    if ($register['success'] == 1)
-        {
+    if ($register['success']){
         return $register['data']['login_token'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($register));
+    }else{
+        save("error_log.txt", json_encode($register));
         return false;
-        }
     }
+}
 
 function veriflogin($otp, $token)
-    {
+{
     $data = '{"client_name":"gojek:cons:android","client_secret":"83415d06-ec4e-11e6-a41b-6c40088ab51e","data":{"otp":"'.$otp.'","otp_token":"'.$token.'"},"grant_type":"otp","scopes":"gojek:customer:transaction gojek:customer:readonly"}';
     $verif = request("/v4/customers/login/verify", "", $data);
-    if ($verif['success'] == 1)
-        {
+    if ($verif['success']){
         return $verif['data']['access_token'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($verif));
+    }else{
+        save("error_log.txt", json_encode($verif));
         return false;
-        }
     }
+}
 function change($no)
 {
     $data = '{"email":"' .$email . '","name":"'.$nama.'","phone":"+'.$no.'"}';
     $change = request("/v4/customers" ,"", $data);
-    if ($change['success'] == 1) {
+    if ($change['success']) {
         return $change;
-    }
-    else{
+    }else{
         save("error_log.txt", json_encode($change));
         return false;
     }
@@ -124,111 +113,100 @@ function change($no)
 function verifchange($otp,$uid)
 {
     $data = '{"id":'.$uid.',"phone":"+'.$no.'","verificationCode":"'.$otp.'"}';
-        $verifchange = request("/v4/customer/verificationUpdateProfil" ,"",$data);
-        if ($verifchange['success'] == 1) {
-            return $verifchange;
-        }
-        else{
-            save("error_log.txt", json_encode($verifchange));
+    $verifchange = request("/v4/customer/verificationUpdateProfil" ,"",$data);
+    if ($verifchange['success']) {
+        return $verifchange;
+    }else{
+        save("error_log.txt", json_encode($verifchange));
         return false;
-        }
+    }
 }
 function verif($otp, $token)
-    {
+{
     $data = '{"client_name":"gojek:cons:android","data":{"otp":"' . $otp . '","otp_token":"' . $token . '"},"client_secret":"83415d06-ec4e-11e6-a41b-6c40088ab51e"}';
     $verif = request("/v5/customers/phone/verify", "", $data);
-    if ($verif['success'] == 1)
-        {
+    if ($verif['success']){
         return $verif['data']['access_token'];
-        }
-      else
-        {
-       save("error_log.txt", json_encode($verif));
+    }else{
+        save("error_log.txt", json_encode($verif));
         return false;
-        }
     }
+}
 function claim($token)
-    {
+{
     $data = '{"promo_code":"GOFOODBOBA07"}';    
     $claim = request("/go-promotions/v1/promotions/enrollments", $token, $data);
-    if ($claim['success'] == 1)
-        {
+    if ($claim['success']){
         return $claim['data']['message'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($claim));
+    }else{
+        save("error_log.txt", json_encode($claim));
         return false;
-        }
     }
-    function claim1($token)
-    {
+}
+function claim1($token)
+{
     $data = '{"promo_code":"GOFOODBOBA10"}';    
     $claim = request("/go-promotions/v1/promotions/enrollments", $token, $data);
-    if ($claim['success'] == 1)
-        {
+    if ($claim['success']){
         return $claim['data']['message'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($claim));
+    }else{
+        save("error_log.txt", json_encode($claim));
         return false;
-        }
     }
-    function claim2($token)
-    {
+}
+function claim2($token)
+{
     $data = '{"promo_code":"GOFOODBOBA19"}';    
     $claim = request("/go-promotions/v1/promotions/enrollments", $token, $data);
-    if ($claim['success'] == 1)
-        {
+    if ($claim['success']){
         return $claim['data']['message'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($claim));
+    }else{
+        save("error_log.txt", json_encode($claim));
         return false;
-        }
     }
-     function ride($token)
-    {
+}
+function claim3($token)
+{
+    $data = '{"promo_code":"gofoodsantai19"}';    
+    $claim = request("/go-promotions/v1/promotions/enrollments", $token, $data);
+    if ($claim['success']){
+        return $claim['data']['message'];
+    }else{
+        save("error_log.txt", json_encode($claim));
+        return false;
+    }
+}
+function ride($token)
+{
     $data = '{"promo_code":"COBAINGOJEK"}';    
     $claim = request("/go-promotions/v1/promotions/enrollments", $token, $data);
-    if ($claim['success'] == 1)
-        {
+    if ($claim['success']){
         return $claim['data']['message'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($claim));
-          return false;
-        }
+    }else{
+        save("error_log.txt", json_encode($claim));
+        return false;
     }
-     function cekvocer($token)
-    {
+}
+function cekvocer($token)
+{
     $data = '{"promo_code":"AYOCOBAGOJEK"}';    
     $claim = request("/go-promotions/v1/promotions/enrollments", $token, $data);
-    if ($claim['success'] == 1)
-        {
+    if ($claim['success']){
         return $claim['data']['message'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($claim));
+    }else{
+        save("error_log.txt", json_encode($claim));
         return false;
-        }
     }
-     function pengen($token)
-    {
+}
+function pengen($token)
+{
     $data = '{"promo_code":"JAJANPAKEGOPAY"}';    
     $claim = request("/go-promotions/v1/promotions/enrollments", $token, $data);
-    if ($claim['success'] == 1)
-        {
+    if ($claim['success']){
         return $claim['data']['message'];
-        }
-      else
-        {
-      save("error_log.txt", json_encode($claim));
+    }else{
+        save("error_log.txt", json_encode($claim));
         return false;
-        }
     }
+}
 ?>
